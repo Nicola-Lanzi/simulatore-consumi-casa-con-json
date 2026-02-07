@@ -27,6 +27,15 @@
     {
       "tipo": "Lavatrice",
       "velocita_centrifuga": 800
+    },
+    {
+      "tipo": "PannelliFotovoltaici",
+      "n_pannelli": 5,
+      "area": 1.65,
+      // Questo valore è un segnaposto finche che il gruppo del clima implementa la logica per calcolare la potenza del sole e il rendimento
+      "potenza_sole": 1367,
+      // In percentuale
+      "rendimento": 1.00
     }
   ]
 }

@@ -66,6 +66,27 @@ public class Simulator {
                                 System.out.println("   Temperatura impostata: " + tempFrigo + "°C");
                             }
                             break;
+                        case "PannelliFotovoltaici":
+                            if (elettrodomestico.has("n_pannelli")) {
+                                int nPannelli = elettrodomestico.getInt("n_pannelli");
+                                ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setNPannelli(nPannelli);
+                                System.out.println("\n" + (i+1) + ". Configurazione Pannelli Fotovoltaici:");
+                                System.out.println("   Numero pannelli: " + nPannelli);
+
+                                double area = elettrodomestico.getDouble("area");
+                                ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setArea(area);
+                                System.out.println("   Area di un singolo pannello: " + area + " m²");
+    
+                                double potenzaSole = elettrodomestico.getDouble("potenza_sole");
+                                ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setPotenzaSole(potenzaSole);
+                                System.out.println("   Potenza del sole: " + potenzaSole + " W/m²");
+
+                                double rendimento = elettrodomestico.getDouble("rendimento");
+                                ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setRendimento(rendimento);
+                                System.out.println("   Rendimento: " + rendimento * 100.0 + " %");    
+                            }
+                            
+                            break;
                     }
                 }
             }

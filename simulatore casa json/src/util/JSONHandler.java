@@ -88,6 +88,19 @@ public class JSONHandler {
                     elettrodomestico.put("temperatura", scanner.nextDouble());
                     break;
 
+                case "frigo":
+                    System.out.print("Temperatura frigo (2-8°C): ");
+                    elettrodomestico.put("temperatura", scanner.nextDouble());
+                    break;
+
+                case "pannellifotovoltaici":
+                    System.out.print("Numero pannelli (0 per disabilitare): \n");
+                    elettrodomestico.put("n_pannelli", scanner.nextInt());
+
+                    System.out.print("Area di un singolo pannello (m²): ");
+                    elettrodomestico.put("area", scanner.nextDouble());
+                    break;
+
                 default:
                     System.out.println("Tipo non riconosciuto. Saltato.");
                     continue;
