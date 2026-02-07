@@ -60,7 +60,7 @@ public class Casa {
 
                 case "pannellifotovoltaici":
                     PannelliFotovoltaici pannelliFotovoltaici = new PannelliFotovoltaici();
-                    if (!(config.getInt("n_pannelli") != 0)) {
+                    if (config.getInt("n_pannelli") != 0) {
                         pannelliFotovoltaici.setNPannelli(config.getInt("n_pannelli"));
                         pannelliFotovoltaici.setPotenzaSole(config.getInt`("potenza_sole"));
                         pannelliFotovoltaici.setArea(config.getDouble("area"));
