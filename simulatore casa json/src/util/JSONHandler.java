@@ -88,11 +88,6 @@ public class JSONHandler {
                     elettrodomestico.put("temperatura", scanner.nextDouble());
                     break;
 
-                case "frigo":
-                    System.out.print("Temperatura frigo (2-8°C): ");
-                    elettrodomestico.put("temperatura", scanner.nextDouble());
-                    break;
-
                 case "pannellifotovoltaici":
                     System.out.print("Numero pannelli (0 per disabilitare): \n");
                     elettrodomestico.put("n_pannelli", scanner.nextInt());

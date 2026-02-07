@@ -1,13 +1,11 @@
-package fotovoltaico;
-
-import home_appliances.Elettrodomestico;
+package home_appliances;
 
 public class PannelliFotovoltaici extends Elettrodomestico {
     private int n_pannelli;
     private double energia_prodotta;
     private double rendimento;
     private double area;
-    private int sun;
+    private int potenza_sole;
 
     public PannelliFotovoltaici() {
         super("Pannelli Fotovoltaici", 0.0);
@@ -15,11 +13,11 @@ public class PannelliFotovoltaici extends Elettrodomestico {
     }
 
 
-    public void setParameters(float area, int n_pannelli, double rendimento, int sun) {
+    public void setParameters(float area, int n_pannelli, double rendimento, int potenza_sole) {
         this.area = area;
         this.n_pannelli = n_pannelli;
         this.rendimento = rendimento;
-        this.sun = sun;
+        this.potenza_sole = potenza_sole;
     }
 
 
@@ -29,7 +27,7 @@ public class PannelliFotovoltaici extends Elettrodomestico {
 
     @Override
     public double getConsumoOrario() {
-        return ( n_pannelli * this.rendimento * (this.sun / 1000.0) * this.area) ;
+        return ( n_pannelli * this.rendimento * (this.potenza_sole / 1000.0) * this.area) ;
     }
 
     @Override
@@ -40,14 +38,22 @@ public class PannelliFotovoltaici extends Elettrodomestico {
     @Override
     public String toString() {
         return String.format("%s - Produzione orario: %.2f kW - Energia prodotta: %.2f kW",
-                getNome(), produzioneOraria, energia_prodotta);
+                getNome(), getConsumoOrario(), energia_prodotta);
     }
 
-    public void setRendimento() {
-        this.rendimento =  rendimento
+    public void setRendimento(double rendimento) {
+        this.rendimento =  rendimento;
     }
 
-    public void setSun(int sun) {
-        this.sun = sun;
+    public void setPotenzaSole(int potenza_sole) {
+        this.potenza_sole = potenza_sole;
+    }
+
+    public void setNPannelli(int n_pannelli) {
+        this.n_pannelli = n_pannelli;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
     }
 }

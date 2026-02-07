@@ -77,9 +77,9 @@ public class Simulator {
                                 ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setArea(area);
                                 System.out.println("   Area di un singolo pannello: " + area + " m²");
     
-                                double potenzaSole = elettrodomestico.getDouble("potenza_sole");
-                                ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setPotenzaSole(potenzaSole);
-                                System.out.println("   Potenza del sole: " + potenzaSole + " W/m²");
+                                int potenza_sole = elettrodomestico.getInt("potenza_sole");
+                                ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setPotenzaSole(potenza_sole);
+                                System.out.println("   Potenza del sole: " + potenza_sole + " W/m²");
 
                                 double rendimento = elettrodomestico.getDouble("rendimento");
                                 ((home_appliances.PannelliFotovoltaici) casa.getElettrodomestici().get(i)).setRendimento(rendimento);
