@@ -113,13 +113,6 @@ La simulazione produce un report che include:
 - `ApplianceDoesntExistException`: quando si tenta di creare un elettrodomestico non supportato
 - `MissingArgumentConfigurationException`: quando mancano parametri obbligatori nel file JSON
 
-## Estensibilità
-
-Il progetto è progettato per essere esteso facilmente:
-1. Aggiungere nuovi tipi di elettrodomestici estendendo `Elettrodomestico`
-2. Modificare le regole di scheduling in `Simulatore.scheduleActivation()`
-3. Aggiungere nuove stagioni o condizioni meteorologiche in `Stagione`
-
 ## Esempio di Output
 
 ```
