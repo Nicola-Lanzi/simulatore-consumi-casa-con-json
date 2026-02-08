@@ -89,22 +89,6 @@ Il progetto utilizza un file JSON di configurazione (`config.json`) che deve con
 - Frigo: `consumo_orario`, `temperatura`
 - Pannelli: `n_pannelli`, `area`, `rendimento`
 
-## Utilizzo
-
-### Compilazione
-```bash
-javac -cp ".:json-20210307.jar" Main.java
-```
-
-### Esecuzione
-```bash
-java -cp ".:json-20210307.jar" Main
-```
-
-### Dipendenze
-- `org.json` per il parsing dei file JSON
-- Java 11 o superiore
-
 ## Logica di Scheduling
 
 Gli elettrodomestici vengono accesi automaticamente secondo questo schema:
