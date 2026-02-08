@@ -1,12 +1,8 @@
-package simulation;
+import simulation.*;
 
-public class Main {
-    void main() {
-
+void main() {
         Casa casa1 = new Casa("nicola,diego,francesca,manuel");
         String fileJson = "config.json";
         Simulatore simulatore = new Simulatore();
-
         simulatore.esegui(casa1, fileJson);
-    }
 }

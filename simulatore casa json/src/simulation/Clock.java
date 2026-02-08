@@ -5,7 +5,6 @@ public class Clock {
     private int duration;
     private int elapsedTime;
 
-
     public Clock(){
         this.elapsedTime = 0;
         time = 0;
@@ -16,10 +15,12 @@ public class Clock {
         time = elapsedTime / 60;
     }
 
-
-
     public int getTime() {
         return time;
+    }
+
+    public int getElapsedTime() {
+        return elapsedTime;
     }
 
     public void setDuration(int duration) {

@@ -12,7 +12,7 @@ public class Casa {
     private String nome;
     private Double costkwh;
     private double kwhUtilized;
-    private Double consume;
+    private Stagione stagione;
 
     public String getNome() {
         return nome;
@@ -23,7 +23,6 @@ public class Casa {
         this.clock = new Clock();
         this.nome = nome;
         this.costkwh = 0D;
-        this.consume = 0D;
         this.kwhUtilized = 0D;
     }
 
@@ -38,6 +37,9 @@ public class Casa {
     public void impostSimulation(JSONObject simulation,String costName,String durationName) {
         this.costkwh = simulation.getDouble(costName);
         clock.setDuration(simulation.getInt(durationName));
+        if(simulation.has("stagione")) {
+            this.stagione = new Stagione(simulation.getString("stagione"));
+        }
     }
 
     public int getDurationSimulation() {
@@ -70,6 +72,15 @@ public class Casa {
                 .mapToDouble(Elettrodomestico::getConsumoOrario)
                 .sum();
         kwhUtilized += kwUsedThisHour;
+
+        if(stagione != null) {
+            int currentHour = clock.getTime();
+            double irradiazione = stagione.calcIrradiazione(currentHour);
+            elettrodomestici.stream()
+                    .filter(app -> app instanceof PannelliFotovoltaici)
+                    .map(app -> (PannelliFotovoltaici) app)
+                    .forEach(pannelli -> pannelli.setFattoreIrradiazione(irradiazione / 5.0));
+        }
     }
 
     public double getKwhUsed() {
@@ -77,10 +88,28 @@ public class Casa {
     }
 
     public double getconsume() {
-        return kwhUtilized * costkwh;
+        double consumoNetto = kwhUtilized;
+        if(stagione != null) {
+            double energiaProdotta = elettrodomestici.stream()
+                    .filter(app -> app instanceof PannelliFotovoltaici)
+                    .mapToDouble(app -> ((PannelliFotovoltaici) app).getEnergiaProdotta())
+                    .sum();
+            consumoNetto = Math.max(0, kwhUtilized - energiaProdotta);
+        }
+        return consumoNetto * costkwh;
     }
 
     public double getCostoKwh() {
         return costkwh;
+    }
+
+    public double getEnergiaProdotta() {
+        if(stagione != null) {
+            return elettrodomestici.stream()
+                    .filter(app -> app instanceof PannelliFotovoltaici)
+                    .mapToDouble(app -> ((PannelliFotovoltaici) app).getEnergiaProdotta())
+                    .sum();
+        }
+        return 0;
     }
 }

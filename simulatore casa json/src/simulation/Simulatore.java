@@ -8,8 +8,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Simulatore {
 
@@ -32,6 +30,10 @@ public class Simulatore {
                 Frigo refrigerator = new Frigo(appliance,"temperatura");
                 casa.addAppliance(refrigerator);
                 break;
+            case "pannellifotovoltaici":
+                PannelliFotovoltaici pannelli = new PannelliFotovoltaici(appliance);
+                casa.addAppliance(pannelli);
+                break;
             default:
                 throw new ApplianceDoesntExistException("L'elettrodomestico non esiste");
         }
@@ -45,7 +47,7 @@ public class Simulatore {
         try{
             configList = Files.readAllBytes(path);
         } catch (IOException e) {
-            IO.println(fileJson);
+            System.out.println(fileJson);
             throw new RuntimeException(e);
         }
 
@@ -62,11 +64,15 @@ public class Simulatore {
             JSONObject appliance = appliancesList.getJSONObject(i);
             parseAppliance(appliance,casa);
         }
-        IO.println(String.format("SIMULAZIONE: %s",casa.getNome()));
-        IO.println(String.format("Durata simulazione: %s",casa.getDurationSimulation()));
+        System.out.println(String.format("SIMULAZIONE: %s",casa.getNome()));
+        System.out.println(String.format("Durata simulazione: %s",casa.getDurationSimulation()));
 
-        IO.println("\nINIZIO SIMULAZIONE");
-        IO.println("Inizio simulazione: " + casa.getClock().getTime());
+        if(simulation.has("stagione")) {
+            System.out.println("Stagione: " + simulation.getString("stagione"));
+        }
+
+        System.out.println("\nINIZIO SIMULAZIONE");
+        System.out.println("Inizio simulazione: " + casa.getClock().getTime());
 
         while(casa.isSimulationRunning()){
             casa.clockTick();
@@ -76,10 +82,16 @@ public class Simulatore {
                 scheduleActivation(casa);
             }
         }
-        IO.println("\nFINE SIMULAZIONE");
-        IO.println("Tempo finale: " + casa.getClock().getTime() + " (ore)");
-        IO.println("Consumo totale: " + String.format("%.2f", casa.getKwhUsed()) + " kWh");
-        IO.println("Costo stimato (" + String.format("%.2f", casa.getCostoKwh()) + " €/kWh): " + String.format("%.2f", casa.getconsume()) + " €");
+        System.out.println("\nFINE SIMULAZIONE");
+        System.out.println("Tempo finale: " + casa.getClock().getTime() + " (ore)");
+        double consumoNetto = casa.getKwhUsed() - casa.getEnergiaProdotta();
+        System.out.println("Consumo totale elettrodomestici: " + String.format("%.2f", casa.getKwhUsed()) + " kWh");
+        System.out.println("Energia prodotta dai pannelli: " + String.format("%.2f", casa.getEnergiaProdotta()) + " kWh");
+        System.out.println("Consumo netto (consumo - produzione): " + String.format("%.2f", Math.max(0, consumoNetto)) + " kWh");
+        System.out.println("Costo stimato (" + String.format("%.2f", casa.getCostoKwh()) + " €/kWh): " + String.format("%.2f", casa.getconsume()) + " €");
+
+        double risparmio = casa.getEnergiaProdotta() * casa.getCostoKwh();
+        System.out.println("Risparmio grazie ai pannelli: " + String.format("%.2f", risparmio) + " €");
     }
 
     private void scheduleActivation(Casa casa) {
@@ -87,7 +99,7 @@ public class Simulatore {
         int currentDay = currentHour / 24;
 
         casa.getAppliances().stream()
-                .filter(appliance -> !(appliance instanceof Frigo))
+                .filter(appliance -> !(appliance instanceof Frigo) && !(appliance instanceof PannelliFotovoltaici))
                 .filter(appliance -> !appliance.isAcceso())
                 .forEach(appliance -> {
                     if (appliance instanceof Lavastoviglie) {
