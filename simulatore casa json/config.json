@@ -1,0 +1,38 @@
+{
+  "simulazione": {
+    "durata_minuti": 1440,
+    "costo_kwh": 0.20
+  },
+  "elettrodomestici": [
+    {
+      "tipo": "Lavastoviglie",
+      "programma": 2,
+      "consumo_orario" : 1.2
+    },
+    {
+      "tipo": "Lavatrice",
+      "velocita_centrifuga": 1400,
+      "consumo_orario" : 2
+    },
+    {
+      "tipo": "Asciugatrice",
+      "temperatura_asciugatura": 70,
+      "consumo_orario" : 2
+    },
+    {
+      "tipo": "Frigorifero",
+      "temperatura": 5.0,
+      "consumo_orario" : 0.1
+    },
+    {
+      "tipo": "Lavastoviglie",
+      "programma": 1,
+      "consumo_orario" : 1.2
+    },
+    {
+      "tipo": "Lavatrice",
+      "velocita_centrifuga": 800,
+      "consumo_orario" : 2
+    }
+  ]
+}
