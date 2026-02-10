@@ -1,133 +1,167 @@
 # Simulatore di Consumo Energetico Domestico
 
-Un simulatore che modella il consumo energetico di una casa, inclusi elettrodomestici comuni e pannelli fotovoltaici, con supporto per diverse stagioni e condizioni meteorologiche.
+Un'applicazione Java per simulare il consumo energetico di una casa, inclusi elettrodomestici, sistemi di riscaldamento e pannelli fotovoltaici.
 
-## Panoramica
+## Descrizione
 
-Il progetto simula il consumo energetico di una casa nel tempo, considerando:
-- **Elettrodomestici** con comportamenti realistici
-- **Pannelli fotovoltaici** che producono energia in base all'irradiazione solare
-- **Variazioni stagionali** (estate/inverno) che influenzano la produzione solare
-- **Condizioni meteorologiche** casuali (sereno, nuvoloso, pioggia)
-- **Scheduling automatico** degli elettrodomestici
-
-## Caratteristiche
-
-### Elettrodomestici Supportati
-- **Lavatrice** - consumo varia con la velocità di centrifuga
-- **Lavastoviglie** - diversi programmi (Eco, Intensivo, Rapido)
-- **Asciugatrice** - consumo dipende dalla temperatura di asciugatura
-- **Frigorifero** - sempre acceso, consumo dipende dalla temperatura impostata
-- **Pannelli Fotovoltaici** - producono energia in base all'irradiazione solare
-
-### Sistema di Simulazione
-- **Clock interno** che gestisce il passare del tempo (in minuti/ore)
-- **Gestione delle stagioni** con parametri specifici per estate e inverno
-- **Calcolo dell'irradiazione solare** basato su ora del giorno e condizioni meteorologiche
-- **Scheduling automatico** degli elettrodomestici in base al giorno e all'ora
+Questo progetto simula il consumo energetico di una abitazione nel tempo, tenendo conto di:
+- Vari elettrodomestici con comportamenti diversi
+- Sistemi di riscaldamento che si attivano in base alla temperatura
+- Pannelli fotovoltaici che producono energia in base alla stagione e all'irradiazione solare
+- Variazioni stagionali della temperatura e dell'irradiazione solare
 
 ## Struttura del Progetto
 
+### Package Principal
+
+- **`simulation`**: Contiene le classi core della simulazione
+- **`home_appliances`**: Contiene le classi degli elettrodomestici
+- **`exception`**: Contiene le eccezioni personalizzate
+
+### Classi Principali
+
+#### Package `simulation`
+- **`Casa`**: Classe principale che rappresenta una casa con tutti i suoi componenti
+- **`Simulatore`**: Gestisce l'esecuzione della simulazione
+- **`Clock`**: Gestisce il tempo della simulazione (ore, giorni, stagioni)
+- **`Stagione`**: Gestisce l'irradiazione solare in base alla stagione
+- **`Season`**: Enumerazione delle stagioni
+
+#### Package `home_appliances`
+- **`Elettrodomestico`**: Classe astratta base per tutti gli elettrodomestici
+- **`Lavatrice`**: Rappresenta una lavatrice
+- **`Lavastoviglie`**: Rappresenta una lavastoviglie
+- **`Asciugatrice`**: Rappresenta un'asciugatrice
+- **`Frigo`**: Rappresenta un frigorifero
+- **`PannelliFotovoltaici`**: Rappresenta pannelli solari fotovoltaici
+- **`Riscaldamento`**: Classe astratta per i sistemi di riscaldamento
+
+#### Package `exception`
+- **`ApplianceDoesntExistException`**: Eccezione per elettrodomestici non riconosciuti
+- **`MissingArgumentConfigurationException`**: Eccezione per parametri di configurazione mancanti
+
+## Come Eseguire
+
+### Prerequisiti
+- Java 11 o superiore
+- Libreria JSON (org.json)
+
+### Compilazione ed Esecuzione
+
+1. Compilare tutte le classi Java:
+```bash
+javac -cp ".;json-java.jar" simulation/*.java home_appliances/*.java exception/*.java
 ```
-src/
-├── home_appliances/
-│   ├── Elettrodomestico.java (classe base astratta)
-│   ├── Lavatrice.java
-│   ├── Lavastoviglie.java
-│   ├── Asciugatrice.java
-│   ├── Frigo.java
-│   └── PannelliFotovoltaici.java
-├── simulation/
-│   ├── Simulatore.java (logica principale)
-│   ├── Casa.java (gestione della casa)
-│   ├── Clock.java (gestione del tempo)
-│   └── Stagione.java (gestione stagioni e meteo)
-├── exception/
-│   ├── ApplianceDoesntExistException.java
-│   └── MissingArgumentConfigurationException.java
-└── Main.java (entry point)
+
+2. Eseguire il programma principale:
+```bash
+java -cp ".;json-java.jar" Main
 ```
 
 ## Configurazione
 
-Il progetto utilizza un file JSON di configurazione (`config.json`) che deve contenere:
+Il sistema utilizza un file JSON (`config.json`) per configurare la simulazione:
 
+### Struttura del file di configurazione:
 ```json
 {
   "simulazione": {
+    "durata_ore": 24,
     "costo_kwh": 0.20,
-    "durata_minuti": 10080,
     "stagione": "estate"
   },
   "elettrodomestici": [
     {
-      "tipo": "lavatrice",
-      "consumo_orario": 1.5,
-      "velocita_centrifuga": 1200
+      "tipo": "Lavatrice",
+      "velocita_centrifuga": 1400,
+      "consumo_orario": 2.0
     },
+    ...
+  ],
+  "riscaldamento": [
     {
-      "tipo": "pannellifotovoltaici",
-      "n_pannelli": 10,
-      "area": 1.6,
-      "rendimento": 0.18
-    }
+      "tipo": "Termoventilatore",
+      "consumo_orario": 1.6,
+      "temperatura_desiderata": 15.0
+    },
+    ...
   ]
 }
 ```
 
-### Parametri di Configurazione
+### Parametri supportati:
 
-**Simulazione:**
-- `costo_kwh`: costo per kWh in euro
-- `durata_minuti`: durata totale della simulazione in minuti
-- `stagione`: "estate" o "inverno" (opzionale)
+#### Elettrodomestici:
+- **Lavatrice**: `tipo`, `velocita_centrifuga`, `consumo_orario`
+- **Lavastoviglie**: `tipo`, `programma`, `consumo_orario`
+- **Asciugatrice**: `tipo`, `temperatura_asciugatura`, `consumo_orario`
+- **Frigorifero**: `tipo`, `temperatura`, `consumo_orario`
+- **PannelliFotovoltaici**: `tipo`, `n_pannelli`, `area`, `rendimento`, `consumo_orario`
 
-**Elettrodomestici:**
-- Lavatrice: `consumo_orario`, `velocita_centrifuga`
-- Lavastoviglie: `consumo_orario`, `programma` (1=Eco, 2=Intensivo, 3=Rapido)
-- Asciugatrice: `consumo_orario`, `temperatura_asciugatura`
-- Frigo: `consumo_orario`, `temperatura`
-- Pannelli: `n_pannelli`, `area`, `rendimento`
-
-## Logica di Scheduling
-
-Gli elettrodomestici vengono accesi automaticamente secondo questo schema:
-
-- **Lavastoviglie**: ogni giorno alle 8:00 e 20:00
-- **Lavatrice e Asciugatrice**: ogni domenica (giorno 0) e mercoledì (giorno 3) alle 10:00
-- **Frigo**: sempre acceso
-- **Pannelli Fotovoltaici**: sempre "accesi", producono in base alla luce solare
+#### Riscaldamento:
+- `tipo`: Nome del sistema di riscaldamento
+- `consumo_orario`: Consumo in kWh all'ora
+- `temperatura_desiderata`: Temperatura alla quale si attiva il sistema
 
 ## Output della Simulazione
 
-La simulazione produce un report che include:
-- Durata totale della simulazione
-- Consumo totale degli elettrodomestici (kWh)
-- Energia prodotta dai pannelli fotovoltaici (kWh)
-- Consumo netto (consumo - produzione)
-- Costo stimato in euro
-- Risparmio grazie ai pannelli fotovoltaici
+La simulazione produce un output che include:
+- Informazioni iniziali sulla simulazione
+- Stato della simulazione durante l'esecuzione
+- Risultati finali:
+  - Consumo totale degli elettrodomestici
+  - Energia prodotta dai pannelli fotovoltaici
+  - Consumo netto (consumo - produzione)
+  - Costo stimato
+  - Risparmio grazie ai pannelli fotovoltaici
+  - Costo finale
 
-## Eccezioni Personalizzate
+## Funzionalità
 
-- `ApplianceDoesntExistException`: quando si tenta di creare un elettrodomestico non supportato
-- `MissingArgumentConfigurationException`: quando mancano parametri obbligatori nel file JSON
+### Gestione del Tempo
+- Simulazione di ore, giorni e stagioni
+- Variazione della temperatura in base alla stagione e all'ora del giorno
+- Cambi stagionali automatici
 
-## Esempio di Output
+### Elettrodomestici
+- Accensione/spegnimento programmato
+- Consumo variabile in base ai parametri (es. velocità centrifuga, programma)
+- Frigo sempre acceso
+- Pannelli fotovoltaici con produzione variabile in base all'irradiazione
 
-```
-SIMULAZIONE: nicola,diego,francesca,manuel
-Durata simulazione: 10080
-Stagione: estate
+### Riscaldamento
+- Attivazione automatica quando la temperatura scende sotto la soglia desiderata
+- Consumo orario costante quando attivi
 
-INIZIO SIMULAZIONE
-Inizio simulazione: 0
+### Schedulazione Automatica
+- Lavastoviglie: attivazione alle 8:00 e 20:00
+- Lavatrice e Asciugatrice: attivazione il giorno 0 e 3 di ogni settimana alle 10:00
 
-FINE SIMULAZIONE
-Tempo finale: 168 (ore)
-Consumo totale elettrodomestici: 45.67 kWh
-Energia prodotta dai pannelli: 28.34 kWh
-Consumo netto (consumo - produzione): 17.33 kWh
-Costo stimato (0.20 €/kWh): 3.47 €
-Risparmio grazie ai pannelli: 5.67 €
-```
+## Esempio di Configurazione
+
+Vedi il file `config.json` incluso per un esempio completo con:
+- 7 elettrodomestici diversi
+- 17 sistemi di riscaldamento di vari tipi
+- Pannelli fotovoltaici
+- Simulazione di 24 ore in estate
+
+## Calcoli Energetici
+
+1. **Consumo elettrodomestici**: Somma dei consumi orari di tutti gli elettrodomestici accesi
+2. **Consumo riscaldamento**: Somma dei consumi dei sistemi attivi
+3. **Produzione pannelli**: Calcolata in base a:
+   - Numero di pannelli
+   - Area
+   - Rendimento
+   - Irradiazione solare (dipendente da stagione e ora del giorno)
+4. **Consumo netto**: Consumo totale - produzione pannelli
+5. **Costo totale**: Consumo netto × costo per kWh
+
+## Risoluzione Problemi
+
+### Errori Comuni:
+1. **File JSON non trovato**: Verificare il percorso del file di configurazione
+2. **Parametri mancanti**: Tutti i parametri richiesti devono essere presenti nel JSON
+3. **Tipo elettrodomestico non riconosciuto**: Verificare l'ortografia nel campo "tipo"
+
+
