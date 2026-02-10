@@ -40,24 +40,6 @@ Questo progetto simula il consumo energetico di una abitazione nel tempo, tenend
 - **`ApplianceDoesntExistException`**: Eccezione per elettrodomestici non riconosciuti
 - **`MissingArgumentConfigurationException`**: Eccezione per parametri di configurazione mancanti
 
-## Come Eseguire
-
-### Prerequisiti
-- Java 11 o superiore
-- Libreria JSON (org.json)
-
-### Compilazione ed Esecuzione
-
-1. Compilare tutte le classi Java:
-```bash
-javac -cp ".;json-java.jar" simulation/*.java home_appliances/*.java exception/*.java
-```
-
-2. Eseguire il programma principale:
-```bash
-java -cp ".;json-java.jar" Main
-```
-
 ## Configurazione
 
 Il sistema utilizza un file JSON (`config.json`) per configurare la simulazione:
